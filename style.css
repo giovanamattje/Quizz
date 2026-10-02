@@ -7,10 +7,12 @@ body{
     font-family: 'Courier New', Courier, monospace;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: center; /* CORRIGIDO: Agora centraliza tudo junto no meio da tela */
     align-items: center;
-    background: linear-gradient(135deg, #f502b4,  #640387 );
+    background: linear-gradient(135deg, #f502b4, #640387);
     color: white;
+    padding: 20px 0;
 }
 
 .jogo{
@@ -18,15 +20,19 @@ body{
     max-width: 800px;
 }
 header{
-    font-size: 12px;
+    font-size: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;   /* Empilha o GIF e o texto da Categoria */
+    align-items: center;      /* Centraliza os dois horizontalmente */
+    text-align: center;       /* Centraliza o texto caso quebre linha */
+    margin-bottom: 20px; 
 } 
 #categoria{
     margin-top: 10spx;
     opacity: 0.8;
 }
-header h1{
-    font-size: 30px;
-}
+
 .painel{
     background-color: rgba(0, 0, 0, 0.35);
     padding: 30px;
@@ -94,3 +100,17 @@ header h1{
     opacity: 0.4;
     cursor: not-allowed;
 }
+
+.rodape{
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centraliza o player horizontalmente no rodapé */
+    padding: 10px 0;
+    margin-top: 15px; /* Garante um espaço mínimo entre o jogo e o player */
+}
+
+#musica {
+    width: 90%;
+    max-width: 400px; /* Controla o tamanho máximo do player para não distorcer */
+}
+

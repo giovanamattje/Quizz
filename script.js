@@ -116,4 +116,5 @@ function finalizarJogo(){
         carregarPergunta();
     };
 }
-carregarPergunta()
+
+carregarPergunta();
