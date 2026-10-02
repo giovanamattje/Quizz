@@ -23,21 +23,21 @@ function carregarPergunta(){
     proximaBtnE.disabled = true;
     mensagemE.textContent ="";
 
-    alternativas.innerHTML = "";
+    alternativasE.innerHTML = "";
 
     const item = perguntas[perguntaAtual];
     perguntaE.textContent = item.pergunta;
-    numeroPerguntas.textContent =
+    numeroPerguntaE.textContent =
     `Pergunta: ${perguntaAtual + 1} de ${perguntas.length}`;
     premioE.textContent =
         `Prêmio: R${premioAtual} `;
-        item.alternativas,foreach((texto,indice) => {
+        item.alternativas.forEach((texto,indice) => {
             const botao = document.createElement("button");
             botao.classList.add("alternativa");
             botao.textContent =
-            `${string.fromCharCode(65 + indice)} ${texto}`;
+            `${String.fromCharCode(65 + indice)} ${texto}`;
             
-            botao.addEvenListener("click", () =>verificarResposta(indice, botao) );
+            botao.addEventListener("click", () =>verificarResposta(indice, botao) );
             alternativasE.appendChild(botao);
 
         })
