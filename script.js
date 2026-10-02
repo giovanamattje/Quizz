@@ -10,6 +10,8 @@ const premio = [1000, 10000, 20000, 30000, 40000];
 let perguntaAtual = 0;
 let premioAtual = 0;
 let respondeu = false;
+let jogoFinalizado = false;
+
 
 const perguntaE = document.getElementById("pergunta");
 const alternativasE = document.getElementById("alternativas");
@@ -51,8 +53,8 @@ function verificarResposta(indiceEscolhido, botaoEscolhido){
     respondeu = true;
 
     const item = perguntas[perguntaAtual];
-    const botoes = document.querySelector(".alternativa");
-    botoes.forEach
+    const botoes = alternativasE.querySelectorAll(".alternativa");
+    
     botoes.forEach(botao => botao.disabled = true);
     if (indiceEscolhido === item.correta){
         botaoEscolhido.classList.add("correta");
@@ -61,13 +63,13 @@ function verificarResposta(indiceEscolhido, botaoEscolhido){
 
     }
     else{
-        botaoEscolhido.classList.add("errada");
+        botaoEscolhido.classList.add("errado");
     }
     premioE.textContent = `Prêmio:  R$ ${premioAtual.toLocaleString("pt-BR")}`
     proximaBtnE.disabled = false;
 }
 
-proximaBtnE.addEvenListener("click", () => {
+proximaBtnE.addEventListener("click", () => {
     perguntaAtual++;
    if (perguntaAtual<perguntas.length){
     carregarPergunta();
