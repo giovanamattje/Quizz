@@ -65,3 +65,32 @@ header h1{
     transform: scale(1.05);
 }
 
+.correto{
+    background-color: green;
+}
+
+.errado{
+    background-color: red;
+}
+
+.mensagem{
+    min-height: 30px;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.botao-proximo{
+    margin-top: 15px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botao-proxima:disabled{
+    opacity: 0.4;
+    cursor: not-allowed;
+}
