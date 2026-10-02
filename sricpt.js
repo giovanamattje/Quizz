@@ -51,12 +51,12 @@ function verificarResposta(indiceEscolhido, botaoEscolhido){
     respondeu = true;
 
     const item = perguntas[perguntaAtual];
-    const botoes = documento.querySelector(".alternativa");
+    const botoes = document.querySelector(".alternativa");
     botoes.forEach
     botoes.forEach(botao => botao.disabled = true);
     if (indiceEscolhido === item.correta){
         botaoEscolhido.classList.add("correta");
-        premioAtual = premioAtual[perguntaAtual];
+        premioAtual = premio[perguntaAtual];
         mensagemE.textContent = "Resposta correta! Você avançou!";
 
     }
@@ -64,12 +64,12 @@ function verificarResposta(indiceEscolhido, botaoEscolhido){
         botaoEscolhido.classList.add("errada");
     }
     premioE.textContent = `Prêmio:  R$ ${premioAtual.toLocaleString("pt-BR")}`
-    proximaBtnE.disable = false;
+    proximaBtnE.disabled = false;
 }
 
 proximaBtnE.addEvenListener("click", () => {
     perguntaAtual++;
-   if (perguntaAtual<pergunta.length){
+   if (perguntaAtual<perguntas.length){
     carregarPergunta();
    }else{
    finalizarJogo();
