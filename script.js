@@ -4,6 +4,26 @@ const perguntas = [
     pergunta: "Qual linguagem é usada para estruturar páginas web?",
     alternativas: ["CSS", "HTML", "Python", "Java Script"],
     correta: 1
+    },
+    {
+        pergunta: "Qual comando do Git é usado para enviar alterações locais para o GitHub?",
+        alternativas: ["git pull", "git clone", "git push", "git commit"],
+        correta: 2
+    },
+    {
+        pergunta: "Dentro de qual tag HTML devemos linkar o arquivo de estilo externo (CSS)?",
+        alternativas: ["<body>", "<head>", "<script>", "<header>"],
+        correta: 1
+    },
+    {
+        pergunta: "Qual propriedade CSS é usada para mudar a cor de fundo de um elemento?",
+        alternativas: ["color", "font-weight", "background-color", "border-color"],
+        correta: 2
+    },
+    {
+        pergunta: "Qual dessas opções é uma linguagem de programação usada no backend?",
+        alternativas: ["HTML", "Node.js", "CSS", "Markdown"],
+        correta: 1
     }
 ];  
 const premio = [1000, 10000, 20000, 30000, 40000];
