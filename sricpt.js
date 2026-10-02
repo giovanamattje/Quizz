@@ -16,7 +16,7 @@ const alternativasE = document.getElementById("alternativas");
 const mensagemE = document.getElementById("mensagem");
 const numeroPerguntaE = document.getElementById("numero-pergunta");
 const premioE = document.getElementById("premio");
-const proximaE = document.getElementById("proxima");
+const proximaBtnE = document.getElementById("proxima");
 
 function carregarPergunta(){
     respondeu = false;
@@ -67,7 +67,7 @@ function verificarResposta(indiceEscolhido, botaoEscolhido){
     proximaBtnE.disable = false;
 }
 
-proximaE.addEvenListener("click", () => {
+proximaBtnE.addEvenListener("click", () => {
     perguntaAtual++;
    if (perguntaAtual<pergunta.length){
     carregarPergunta();
@@ -83,14 +83,14 @@ function finalizarJogo(){
     mensagemE.textContent = 
     `Você terminou com R$ ${premioAtual}!`;
 
-    proximaE.textContent = "Jogar novamente";
-    proximaE.disabled = false;
+    proximaBtnE.textContent = "Jogar novamente";
+    proximaBtnE.disabled = false;
 
-    proximaE.onclick = () => {
+    proximaBtnE.onclick = () => {
         perguntaAtual = 0;
         premioAtual = 0;
-        proximaE.textContent = "Próxima pergunta";
-        proximaE.onclick = null;
+        proximaBtnE.textContent = "Próxima pergunta";
+        proximaBtnE.onclick = null;
         carregarPergunta();
     };
 }
