@@ -1,5 +1,5 @@
-//array principal
 const perguntas = [
+    // HTML
     {
         pergunta: "Qual tag HTML é usada para criar um link?",
         alternativas: ["<link>", "<a>", "<href>", "<url>"],
@@ -26,14 +26,11 @@ const perguntas = [
         correta: 1
     },
 
-    // 11. CSS
+    // CSS
     {
         pergunta: "Qual propriedade CSS altera o tamanho do texto?",
         alternativas: [
-            "font-style",
-            "text-size",
-            "font-size",
-            "text-weight"
+            "font-style", "text-size", "font-size", "text-weight"
         ],
         correta: 2
     },
@@ -63,7 +60,7 @@ const perguntas = [
         correta: 3
     },
 
-    // 16. JavaScript
+    // JavaScript
     {
         pergunta: "Qual palavra-chave declara uma variável que pode ser reatribuída?",
         alternativas: ["const", "let", "static", "define"],
@@ -115,12 +112,12 @@ const perguntas = [
         correta: 0
     },
     {
-        pergunta: "O que uma função pode receber para utilizar como dados de entrada?",
+        pergunta: "O que uma função pode receber como dados de entrada?",
         alternativas: ["Parâmetros", "Seletores", "Estilos", "Tags"],
         correta: 0
     },
 
-    // 24. Lógica de programação
+    // Lógica de programação
     {
         pergunta: "Qual estrutura é normalmente usada para repetir um bloco de código?",
         alternativas: ["if", "for", "return", "import"],
@@ -142,39 +139,24 @@ const perguntas = [
         correta: 0
     },
 
-    // 28. Git e GitHub
+    // Git e GitHub
     {
         pergunta: "Qual comando cria um novo repositório Git no diretório atual?",
-        alternativas: [
-            "git start",
-            "git create",
-            "git init",
-            "git new"
-        ],
+        alternativas: ["git start", "git create", "git init", "git new"],
         correta: 2
     },
     {
         pergunta: "Qual comando registra alterações no histórico local do Git?",
-        alternativas: [
-            "git push",
-            "git commit",
-            "git pull",
-            "git fetch"
-        ],
+        alternativas: ["git push", "git commit", "git pull", "git fetch"],
         correta: 1
     },
     {
         pergunta: "Qual comando baixa e integra alterações de um repositório remoto?",
-        alternativas: [
-            "git clone",
-            "git commit",
-            "git pull",
-            "git status"
-        ],
+        alternativas: ["git clone", "git commit", "git pull", "git status"],
         correta: 2
     },
 
-    // 31. Backend e banco de dados
+    // Backend e banco de dados
     {
         pergunta: "Para que serve um banco de dados?",
         alternativas: [
@@ -215,13 +197,32 @@ const perguntas = [
         ],
         correta: 2
     }
-];  
-const premio = [1000, 10000, 20000, 30000, 40000];
+];
+
+// 2. CONFIGURAÇÕES DO JOGO
+
+const premios = [
+    1000, 2000, 3000, 5000, 10000,
+    15000, 20000, 30000, 40000, 50000,
+    75000, 100000, 125000, 150000, 200000,
+    250000, 300000, 350000, 400000, 450000,
+    500000, 550000, 600000, 650000, 700000,
+    750000, 800000, 850000, 900000, 1000000
+];
+
+const TEMPO_LIMITE = 20;
+
+// 3. ESTADO DO JOGO
+
 let perguntaAtual = 0;
 let premioAtual = 0;
+let acertos = 0;
 let respondeu = false;
 let jogoFinalizado = false;
+let tempoRestante = TEMPO_LIMITE;
+let intervaloCronometro = null;
 
+// 4. ELEMENTOS DO HTML
 
 const perguntaE = document.getElementById("pergunta");
 const alternativasE = document.getElementById("alternativas");
@@ -230,81 +231,296 @@ const numeroPerguntaE = document.getElementById("numero-pergunta");
 const premioE = document.getElementById("premio");
 const proximaBtnE = document.getElementById("proxima");
 
-function carregarPergunta(){
-    respondeu = false;
-    proximaBtnE.disabled = true;
-    mensagemE.textContent ="";
+const cronometroE = document.getElementById("cronometro");
+const pontuacaoE = document.getElementById("pontuacao");
+const progressoE = document.getElementById("barra-progresso");
+const progressoPreenchidoE =
+    document.getElementById("progresso-preenchido");
 
+const painelE = document.querySelector(".painel");
+const resultadoE = document.getElementById("resultado");
+const tituloResultadoE = document.getElementById("titulo-resultado");
+const textoResultadoE = document.getElementById("texto-resultado");
+const resultadoAcertosE = document.getElementById("resultado-acertos");
+const resultadoErrosE = document.getElementById("resultado-erros");
+const resultadoPercentualE =
+    document.getElementById("resultado-percentual");
+const premioFinalE = document.getElementById("premio-final");
+const reiniciarBtnE = document.getElementById("reiniciar");
+
+// 5. FUNÇÕES AUXILIARES
+
+function formatarDinheiro(valor) {
+    return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumFractionDigits: 0
+    });
+}
+
+function atualizarProgresso() {
+    const total = perguntas.length;
+    const percentual = total > 0
+        ? (perguntaAtual / total) * 100
+        : 0;
+
+    progressoPreenchidoE.style.width = `${percentual}%`;
+
+    progressoE.setAttribute("aria-valuemax", total);
+    progressoE.setAttribute("aria-valuenow", perguntaAtual);
+}
+
+function atualizarPontuacao() {
+    pontuacaoE.textContent = `Acertos: ${acertos}`;
+    premioE.textContent = `Prêmio: ${formatarDinheiro(premioAtual)}`;
+}
+
+function pararCronometro() {
+    if (intervaloCronometro !== null) {
+        clearInterval(intervaloCronometro);
+        intervaloCronometro = null;
+    }
+}
+
+function desativarAlternativas() {
+    alternativasE.querySelectorAll(".alternativa").forEach(botao => {
+        botao.disabled = true;
+    });
+}
+
+// 6. CRONÔMETRO
+
+function atualizarCronometro() {
+    cronometroE.textContent = `⏱️ ${tempoRestante} segundos`;
+
+    cronometroE.classList.toggle(
+        "urgente",
+        tempoRestante <= 5
+    );
+}
+
+function iniciarCronometro() {
+    pararCronometro();
+
+    tempoRestante = TEMPO_LIMITE;
+    atualizarCronometro();
+
+    intervaloCronometro = setInterval(() => {
+        tempoRestante--;
+        atualizarCronometro();
+
+        if (tempoRestante <= 0) {
+            pararCronometro();
+
+            if (!respondeu && !jogoFinalizado) {
+                respondeu = true;
+                desativarAlternativas();
+
+                mensagemE.textContent = "⏰ Tempo esgotado!";
+                mensagemE.className = "mensagem erro";
+
+                finalizarJogo("tempo");
+            }
+        }
+    }, 1000);
+}
+
+// 7. CARREGAR PERGUNTA
+
+function carregarPergunta() {
+    if (perguntaAtual >= perguntas.length) {
+        finalizarJogo("concluido");
+        return;
+    }
+
+    respondeu = false;
+
+    proximaBtnE.disabled = true;
+    proximaBtnE.textContent = "Próxima pergunta";
+
+    mensagemE.textContent = "";
+    mensagemE.className = "mensagem";
     alternativasE.innerHTML = "";
 
     const item = perguntas[perguntaAtual];
+
     perguntaE.textContent = item.pergunta;
+
     numeroPerguntaE.textContent =
-    `Pergunta: ${perguntaAtual + 1} de ${perguntas.length}`;
-    premioE.textContent =
-        `Prêmio: R${premioAtual} `;
-        item.alternativas.forEach((texto,indice) => {
-            const botao = document.createElement("button");
-            botao.classList.add("alternativa");
-            botao.textContent =
-            `${String.fromCharCode(65 + indice)} ${texto}`;
-            
-            botao.addEventListener("click", () =>verificarResposta(indice, botao) );
-            alternativasE.appendChild(botao);
+        `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
 
-        })
+    atualizarPontuacao();
+    atualizarProgresso();
 
+    item.alternativas.forEach((texto, indice) => {
+        const botao = document.createElement("button");
 
+        botao.type = "button";
+        botao.classList.add("alternativa");
+        botao.textContent =
+            `${String.fromCharCode(65 + indice)}) ${texto}`;
 
+        botao.addEventListener("click", () => {
+            verificarResposta(indice, botao);
+        });
+
+        alternativasE.appendChild(botao);
+    });
+
+    iniciarCronometro();
 }
 
-function verificarResposta(indiceEscolhido, botaoEscolhido){
-    if (respondeu) return;
+// 8. VERIFICAR RESPOSTA
+
+function verificarResposta(indiceEscolhido, botaoEscolhido) {
+    if (respondeu || jogoFinalizado) return;
+
     respondeu = true;
+    pararCronometro();
 
     const item = perguntas[perguntaAtual];
     const botoes = alternativasE.querySelectorAll(".alternativa");
-    
-    botoes.forEach(botao => botao.disabled = true);
-    if (indiceEscolhido === item.correta){
-        botaoEscolhido.classList.add("correta");
-        premioAtual = premio[perguntaAtual];
-        mensagemE.textContent = "Resposta correta! Você avançou!";
 
-    }
-    else{
+    desativarAlternativas();
+
+    if (indiceEscolhido === item.correta) {
+        botaoEscolhido.classList.add("correta");
+
+        acertos++;
+        premioAtual = premios[perguntaAtual] ?? premioAtual;
+
+        mensagemE.textContent =
+            `🎉 Resposta correta! Você ganhou ${formatarDinheiro(premioAtual)}!`;
+
+        mensagemE.className = "mensagem sucesso";
+
+        atualizarPontuacao();
+
+        proximaBtnE.disabled = false;
+
+        proximaBtnE.textContent =
+            perguntaAtual === perguntas.length - 1
+                ? "Ver resultado"
+                : "Próxima pergunta";
+
+    } else {
         botaoEscolhido.classList.add("errado");
+
+        if (botoes[item.correta]) {
+            botoes[item.correta].classList.add("correta");
+        }
+
+        mensagemE.textContent =
+            `❌ Resposta errada! A resposta correta era: ${
+                item.alternativas[item.correta]
+            }.`;
+
+        mensagemE.className = "mensagem erro";
+
+        atualizarPontuacao();
+
+        proximaBtnE.disabled = true;
+
+        setTimeout(() => {
+            finalizarJogo("erro");
+        }, 1400);
     }
-    premioE.textContent = `Prêmio:  R$ ${premioAtual.toLocaleString("pt-BR")}`
-    proximaBtnE.disabled = false;
 }
+
+// 9. TELA FINAL
+
+function finalizarJogo(motivo) {
+    if (jogoFinalizado) return;
+
+    jogoFinalizado = true;
+    pararCronometro();
+
+    painelE.hidden = true;
+    resultadoE.hidden = false;
+
+    const total = perguntas.length;
+    const erros = total - acertos;
+
+    const percentual = total > 0
+        ? Math.round((acertos / total) * 100)
+        : 0;
+
+    resultadoAcertosE.textContent = acertos;
+    resultadoErrosE.textContent = erros;
+    resultadoPercentualE.textContent = `${percentual}%`;
+
+    premioFinalE.textContent =
+        `Prêmio conquistado: ${formatarDinheiro(premioAtual)}`;
+
+    if (motivo === "concluido") {
+        tituloResultadoE.textContent = "🏆 Parabéns, milionário!";
+
+        textoResultadoE.textContent =
+            "Você respondeu todas as perguntas e concluiu o desafio!";
+
+    } else if (motivo === "tempo") {
+        tituloResultadoE.textContent = "⏰ O tempo acabou!";
+
+        textoResultadoE.textContent =
+            "Não foi dessa vez! Confira seu resultado e tente novamente.";
+
+    } else {
+        tituloResultadoE.textContent = "💔 Fim de jogo!";
+
+        textoResultadoE.textContent =
+            "Você errou uma pergunta. Que tal tentar novamente?";
+    }
+
+    atualizarProgresso();
+}
+
+// 10. REINICIAR JOGO
+
+function reiniciarJogo() {
+    pararCronometro();
+
+    perguntaAtual = 0;
+    premioAtual = 0;
+    acertos = 0;
+    respondeu = false;
+    jogoFinalizado = false;
+    tempoRestante = TEMPO_LIMITE;
+
+    resultadoE.hidden = true;
+    painelE.hidden = false;
+
+    embaralharPerguntas();
+    carregarPergunta();
+}
+
+// 11. EMBARALHAR PERGUNTAS
+
+function embaralharPerguntas() {
+    for (let i = perguntas.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [perguntas[i], perguntas[j]] =
+            [perguntas[j], perguntas[i]];
+    }
+}
+
+// 12. EVENTOS DOS BOTÕES
 
 proximaBtnE.addEventListener("click", () => {
+    if (!respondeu || jogoFinalizado) return;
+
     perguntaAtual++;
-   if (perguntaAtual<perguntas.length){
-    carregarPergunta();
-   }else{
-   finalizarJogo();
 
-}   
-});
-function finalizarJogo(){
-    perguntaE.textContent = "Fim de Jogo!";
-    alternativasE.innerHTML = "";
-    numeroPerguntaE.textContent = "Quizz Concluído";
-    mensagemE.textContent = 
-    `Você terminou com R$ ${premioAtual}!`;
-
-    proximaBtnE.textContent = "Jogar novamente";
-    proximaBtnE.disabled = false;
-
-    proximaBtnE.onclick = () => {
-        perguntaAtual = 0;
-        premioAtual = 0;
-        proximaBtnE.textContent = "Próxima pergunta";
-        proximaBtnE.onclick = null;
+    if (perguntaAtual < perguntas.length) {
         carregarPergunta();
-    };
-}
+    } else {
+        finalizarJogo("concluido");
+    }
+});
 
+reiniciarBtnE.addEventListener("click", reiniciarJogo);
+
+// 13. INICIAR O JOGO
+
+embaralharPerguntas();
 carregarPergunta();
