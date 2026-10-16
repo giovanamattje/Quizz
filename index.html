@@ -1,41 +1,129 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz do milhão</title>
+    <meta name="theme-color" content="#a000a5">
+    <title>Quiz do Milhão</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <main class="jogo">
         <header>
-            <a href="https://www.gigaglitters.com/g/09x962t9dhv"><img src="https://www.gigaglitters.com/g/09x962t9dhv.gif" width="544" height="86" alt="Quizz do Milhão glitter"></a>
+            <a href="https://www.gigaglitters.com/g/09x962t9dhv"
+               target="_blank"
+               rel="noopener noreferrer">
+                <img
+                    class="logo"
+                    src="https://www.gigaglitters.com/g/09x962t9dhv.gif"
+                    alt="Quiz do Milhão"
+                >
+            </a>
+
             <p id="categoria">Categoria: Programação</p>
         </header>
-        
-        <section class="painel">
+
+        <section class="painel" aria-label="Área do quiz">
+
             <div class="status">
-                <span id="numero-pergunta">Pergunta 1 de 5</span>
+                <span id="numero-pergunta">Pergunta 1 de 30</span>
                 <span id="premio">Prêmio: R$ 0</span>
             </div>
-            
-            <h2 id="pergunta">Carregando pergunta...</h2>
-            <div id="alternativas" class="alternativas"></div>
-            <p id="mensagem" class="mensagem"></p>
-            
-            
-            <button id="proxima" class="botao-proxima" disabled> Próxima Pergunta </button>
+
+            <div
+                class="progresso"
+                role="progressbar"
+                aria-label="Progresso do quiz"
+                aria-valuemin="0"
+                aria-valuemax="30"
+                aria-valuenow="0"
+                id="barra-progresso"
+            >
+                <div id="progresso-preenchido"></div>
+            </div>
+
+            <div class="informacoes">
+                <span id="cronometro">⏱️ 20 segundos</span>
+                <span id="pontuacao">Acertos: 0</span>
+            </div>
+
+            <h2 id="pergunta" tabindex="-1">
+                Carregando pergunta...
+            </h2>
+
+            <div
+                id="alternativas"
+                class="alternativas"
+                aria-label="Alternativas da pergunta"
+            ></div>
+
+            <p
+                id="mensagem"
+                class="mensagem"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="acoes">
+                <button
+                    id="proxima"
+                    class="botao-proxima"
+                    disabled
+                >
+                    Próxima pergunta
+                </button>
+            </div>
+        </section>
+
+        <section
+            id="resultado"
+            class="painel resultado"
+            hidden
+            aria-live="polite"
+        >
+            <h2 id="titulo-resultado">Fim de jogo!</h2>
+            <p id="texto-resultado"></p>
+
+            <div class="resumo">
+                <div class="estatistica">
+                    <span class="estatistica-icone">🎯</span>
+                    <span id="resultado-acertos">0</span>
+                    <small>Acertos</small>
+                </div>
+
+                <div class="estatistica">
+                    <span class="estatistica-icone">❌</span>
+                    <span id="resultado-erros">0</span>
+                    <small>Erros</small>
+                </div>
+
+                <div class="estatistica">
+                    <span class="estatistica-icone">📊</span>
+                    <span id="resultado-percentual">0%</span>
+                    <small>Aproveitamento</small>
+                </div>
+            </div>
+
+            <p id="premio-final" class="premio-final"></p>
+
+            <button id="reiniciar" class="botao-proxima">
+                🔄 Jogar novamente
+            </button>
         </section>
     </main>
 
     <footer class="rodape">
-        <audio controls autoplay loop>   
-            <source id="musica" src="musica/Petunia.mp3" type="audio/mpeg">
+        <audio id="musica" controls loop>
+            <source
+                src="musica/Petunia.mp3"
+                type="audio/mpeg"
+            >
+            Seu navegador não suporta áudio.
         </audio>
     </footer>
 
     <script src="script.js"></script>
-
-
 </body>
 </html>
