@@ -2,128 +2,82 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#a000a5">
-    <title>Quiz do Milhão</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz do Milhão 🎀</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="quiz-container">
+    <header>
+      <div class="decoracao">🎀 ✨ 🩷 ✨ 🎀</div>
+      <h1>Quiz do Milhão</h1>
+      <p class="subtitulo">♡ Teste seus conhecimentos em programação ♡</p>
+    </header>
 
-    <main class="jogo">
-        <header>
-            <a href="https://www.gigaglitters.com/g/09x962t9dhv"
-               target="_blank"
-               rel="noopener noreferrer">
-                <img
-                    class="logo"
-                    src="https://www.gigaglitters.com/g/09x962t9dhv.gif"
-                    alt="Quiz do Milhão"
-                >
-            </a>
+    <section id="inicio" class="tela">
+      <div class="icone-grande">🩷</div>
+      <h2>Vamos jogar?</h2>
+      <p>Responda 10 perguntinhas e descubra qual foca combina com você!</p>
+      <p class="dica">Quanto mais você acerta, mais difícil fica. Boa sorte! ♡</p>
+      <button id="btnIniciar">Começar o quiz ✨</button>
+    </section>
 
-            <p id="categoria">Categoria: Programação</p>
-        </header>
+    <section id="jogo" class="tela escondido">
+      <div class="painel">
+        <span id="numeroQuestao">Questão 1/10</span>
+        <span id="dificuldade">🌸 Fácil</span>
+      </div>
 
-        <section class="painel" aria-label="Área do quiz">
+      <div class="barra-fundo">
+        <div id="progresso" class="barra"></div>
+      </div>
 
-            <div class="status">
-                <span id="numero-pergunta">Pergunta 1 de 30</span>
-                <span id="premio">Prêmio: R$ 0</span>
-            </div>
+      <div class="premio">
+        <span>💰 Prêmio acumulado</span>
+        <strong id="premio">R$ 0</strong>
+      </div>
 
-            <div
-                class="progresso"
-                role="progressbar"
-                aria-label="Progresso do quiz"
-                aria-valuemin="0"
-                aria-valuemax="30"
-                aria-valuenow="0"
-                id="barra-progresso"
-            >
-                <div id="progresso-preenchido"></div>
-            </div>
+      <h2 id="pergunta"></h2>
+      <div id="alternativas" class="alternativas"></div>
 
-            <div class="informacoes">
-                <span id="cronometro">⏱️ 20 segundos</span>
-                <span id="pontuacao">Acertos: 0</span>
-            </div>
+      <p id="feedback" role="status" aria-live="polite"></p>
 
-            <h2 id="pergunta" tabindex="-1">
-                Carregando pergunta...
-            </h2>
+      <div class="ajudas">
+        <button id="btnEliminar" class="btn-ajuda">✂️ Eliminar 2</button>
+        <button id="btnDica" class="btn-ajuda">💡 Dica</button>
+        <button id="btnPular" class="btn-ajuda">⏭️ Pular</button>
+      </div>
 
-            <div
-                id="alternativas"
-                class="alternativas"
-                aria-label="Alternativas da pergunta"
-            ></div>
+      <button id="btnProxima" class="escondido">Próxima questão ➜</button>
+    </section>
 
-            <p
-                id="mensagem"
-                class="mensagem"
-                role="status"
-                aria-live="polite"
-            ></p>
+    <section id="resultado" class="tela escondido">
+      <h2 id="tituloResultado">Resultado final!</h2>
+      <div id="gifResultado"></div>
+      <p id="mensagemResultado"></p>
 
-            <div class="acoes">
-                <button
-                    id="proxima"
-                    class="botao-proxima"
-                    disabled
-                >
-                    Próxima pergunta
-                </button>
-            </div>
-        </section>
+      <div class="estatisticas">
+        <div>✅ Acertos<strong id="acertos">0</strong></div>
+        <div>❌ Erros<strong id="erros">0</strong></div>
+        <div>🏆 Pontuação<strong id="pontos">0/10</strong></div>
+      </div>
 
-        <section
-            id="resultado"
-            class="painel resultado"
-            hidden
-            aria-live="polite"
-        >
-            <h2 id="titulo-resultado">Fim de jogo!</h2>
-            <p id="texto-resultado"></p>
+      <div class="premio final-premio">
+        Prêmio final: <strong id="premioFinal">R$ 0</strong>
+      </div>
 
-            <div class="resumo">
-                <div class="estatistica">
-                    <span class="estatistica-icone">🎯</span>
-                    <span id="resultado-acertos">0</span>
-                    <small>Acertos</small>
-                </div>
+      <button id="btnNovamente">Jogar novamente 💗</button>
+    </section>
 
-                <div class="estatistica">
-                    <span class="estatistica-icone">❌</span>
-                    <span id="resultado-erros">0</span>
-                    <small>Erros</small>
-                </div>
-
-                <div class="estatistica">
-                    <span class="estatistica-icone">📊</span>
-                    <span id="resultado-percentual">0%</span>
-                    <small>Aproveitamento</small>
-                </div>
-            </div>
-
-            <p id="premio-final" class="premio-final"></p>
-
-            <button id="reiniciar" class="botao-proxima">
-                🔄 Jogar novamente
-            </button>
-        </section>
-    </main>
-
-    <footer class="rodape">
-        <audio id="musica" controls loop>
-            <source
-                src="musica/Petunia.mp3"
-                type="audio/mpeg"
-            >
-            Seu navegador não suporta áudio.
-        </audio>
+    <footer>
+      <button id="btnMusica" class="musica-btn">🎵 Ligar música</button>
+      <p>Feito com ♡</p>
     </footer>
+  </main>
 
-    <script src="script.js"></script>
+  <audio id="musica" src="musica/Petunia.mp3" loop></audio>
+
+  <script src="script.js"></script>
 </body>
 </html>
