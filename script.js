@@ -382,3 +382,74 @@ const questoes = [
   btnNovamente.addEventListener("click", iniciarJogo);
   btnMusica.addEventListener("click", alternarMusica);
   
+  
+const nomeJogador = document.getElementById("nomeJogador");
+const btnSalvarRanking = document.getElementById("btnSalvarRanking");
+const listaRanking = document.getElementById("listaRanking");
+const mensagemRanking = document.getElementById("mensagemRanking");
+
+function obterRanking() {
+  try {
+    return JSON.parse(localStorage.getItem("rankingQuiz") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function mostrarRanking() {
+  const ranking = obterRanking()
+    .sort((a, b) => b.acertos - a.acertos || b.premio - a.premio)
+    .slice(0, 10);
+
+  listaRanking.replaceChildren();
+
+  ranking.forEach((jogador, indice) => {
+    const item = document.createElement("li");
+
+    const medalhas = ["🥇", "🥈", "🥉"];
+    const medalha = medalhas[indice] || "🎀";
+
+    item.textContent =
+      `${medalha} ${jogador.nome} — ${jogador.acertos}/10 acertos — ` +
+      formatarPremio(jogador.premio);
+
+    listaRanking.appendChild(item);
+  });
+
+  if (ranking.length === 0) {
+    const item = document.createElement("li");
+    item.textContent = "Ainda não há pontuações. Seja a primeira! 💗";
+    listaRanking.appendChild(item);
+  }
+}
+
+btnSalvarRanking.addEventListener("click", () => {
+  const nome = nomeJogador.value.trim();
+
+  if (!nome) {
+    mensagemRanking.textContent = "Digite seu nome primeiro! 🌸";
+    nomeJogador.focus();
+    return;
+  }
+
+  const ranking = obterRanking();
+
+  ranking.push({
+    nome: nome,
+    acertos: acertos,
+    premio: premioAtual
+  });
+
+  try {
+    localStorage.setItem("rankingQuiz", JSON.stringify(ranking));
+
+    mensagemRanking.textContent = "Pontuação salva com sucesso! 💖";
+    nomeJogador.value = "";
+    mostrarRanking();
+  } catch {
+    mensagemRanking.textContent =
+      "Não foi possível salvar. Verifique as configurações do navegador.";
+  }
+});
+
+mostrarRanking();

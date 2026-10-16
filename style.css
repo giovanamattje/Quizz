@@ -312,3 +312,56 @@ footer {
     transition-duration: .01ms !important;
   }
 }
+
+
+.ranking {
+  margin-top: 25px;
+  padding: 18px;
+  background: #fff0f6;
+  border: 2px solid #ffc2d9;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.ranking h2 {
+  font-size: 20px;
+  color: #d63384;
+}
+
+#nomeJogador {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 2px solid #ffc2d9;
+  border-radius: 12px;
+  font: inherit;
+  color: #632747;
+  background: white;
+}
+
+#btnSalvarRanking {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  color: white;
+  background: #e84393;
+  font-weight: 800;
+}
+
+#listaRanking {
+  padding-left: 30px;
+  text-align: left;
+}
+
+#listaRanking li {
+  padding: 10px;
+  margin: 7px 0;
+  background: white;
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+
+#mensagemRanking {
+  font-size: 13px;
+  color: #8f2458;
+}
