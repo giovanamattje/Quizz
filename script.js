@@ -244,23 +244,26 @@ const questoes = [
       premioAtual += premios[indice];
       feedbackEl.textContent = `✨ Acertou! Você ganhou ${formatarPremio(premios[indice])}!`;
       tocarSom("certo");
+      
+      // Configura o botão para avançar normalmente
+      btnProxima.textContent =
+        indice === questoes.length - 1
+          ? "Ver resultado final 💗"
+          : "Próxima questão ➜";
     } else {
       erros++;
-      feedbackEl.textContent = `💗 Não foi dessa vez! A resposta correta era ${String.fromCharCode(65 + q.correta)}.`;
+      feedbackEl.textContent = `💗 Não foi dessa vez! Você errou e o jogo acabou. A resposta correta era ${String.fromCharCode(65 + q.correta)}.`;
       tocarSom("errado");
+  
+      // Força o fim do jogo: muda o texto do botão e altera o índice para o final
+      indice = questoes.length - 1; 
+      btnProxima.textContent = "Ver resultado final 💗";
     }
   
     premioEl.textContent = formatarPremio(premioAtual);
     btnProxima.classList.remove("escondido");
   }
   
-  function formatarPremio(valor) {
-    return valor.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-      maximumFractionDigits: 0
-    });
-  }
   
   function eliminarAlternativas() {
     if (respondida || eliminacoesUsadas >= 1) return;
